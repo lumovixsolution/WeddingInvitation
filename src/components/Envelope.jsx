@@ -9,10 +9,10 @@ const Envelope = ({ onOpen, guestName }) => {
   const triggerOpenAnimation = () => {
     if (isOpening) return;
     setIsOpening(true);
-    
+
     // 1. Fold open the top flap (3D rotateX)
     setFlapOpen(true);
-    
+
     // 2. Slide the invitation card up out of the envelope
     setTimeout(() => {
       setCardSlid(true);
@@ -28,7 +28,7 @@ const Envelope = ({ onOpen, guestName }) => {
     <div className="envelope-container">
       {/* 3D Envelope Physics Wrapper */}
       <div className="envelope-wrapper-3d" onClick={triggerOpenAnimation}>
-        
+
         {/* Top Flap (folds open 180 degrees upwards) */}
         <div className={`envelope-flap-3d ${flapOpen ? 'open' : ''}`}></div>
 
@@ -41,17 +41,17 @@ const Envelope = ({ onOpen, guestName }) => {
         {/* Sliding Invitation Card (Reveals itself) */}
         <div className={`envelope-card-3d ${cardSlid ? 'slide-up' : ''}`}>
           {/* Double Gold Line Borders */}
-          <div style={{ 
-            position: 'absolute', 
-            top: '5px', 
-            left: '5px', 
-            right: '5px', 
-            bottom: '5px', 
-            border: '1.5px solid var(--color-accent-gold-light)', 
+          <div style={{
+            position: 'absolute',
+            top: '5px',
+            left: '5px',
+            right: '5px',
+            bottom: '5px',
+            border: '1.5px solid var(--color-accent-gold-light)',
             borderRadius: '4px',
             pointerEvents: 'none'
           }}></div>
-          
+
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', padding: '10px 5px', zIndex: 6 }}>
             <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1.5px', color: 'var(--color-accent-gold)' }}>
               Save Our Date
@@ -65,7 +65,7 @@ const Envelope = ({ onOpen, guestName }) => {
                 September 23, 2026
               </p>
               <p style={{ fontSize: '0.65rem', color: 'var(--color-text-light)', fontStyle: 'italic', marginTop: '2px' }}>
-                Bali, Indonesia
+                Lover’s Land hotel
               </p>
             </div>
 
@@ -90,12 +90,12 @@ const Envelope = ({ onOpen, guestName }) => {
             <h3>{guestName}</h3>
           </div>
         )}
-        
-        <p style={{ 
-          color: 'var(--color-bg-cream)', 
-          fontSize: '0.75rem', 
-          marginTop: '15px', 
-          letterSpacing: '2px', 
+
+        <p style={{
+          color: 'var(--color-bg-cream)',
+          fontSize: '0.75rem',
+          marginTop: '15px',
+          letterSpacing: '2px',
           textTransform: 'uppercase',
           opacity: 0.8
         }}>
