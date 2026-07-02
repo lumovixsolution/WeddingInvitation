@@ -1,0 +1,827 @@
+/* Premium Design System for Maya & Alexander Wedding Invitation */
+
+:root {
+  --color-primary-pink: #e28a99;
+  --color-primary-pink-light: #fbebee;
+  --color-secondary-pink: #f4c2c9;
+  --color-accent-gold: #c5a059;
+  --color-accent-gold-light: #f7f1e3;
+  --color-sage-green: #8fa89b;
+  --color-sage-green-light: #f0f4f1;
+  --color-sage-green-dark: #587163;
+  --color-text-dark: #2c3e35;
+  --color-text-medium: #546a5f;
+  --color-text-light: #7c9488;
+  --color-bg-cream: #faf8f5;
+  --color-bg-white: #ffffff;
+  --color-overlay-dark: rgba(20, 30, 25, 0.4);
+
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-serif-sc: 'Playfair Display SC', Georgia, serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-sans: 'Montserrat', sans-serif;
+
+  --transition-smooth: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-premium: 0 15px 35px rgba(44, 62, 53, 0.2);
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-gold: 0 4px 15px rgba(197, 160, 89, 0.3);
+}
+
+/* Reset & Global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #647d6e; /* Mossy olive green matching image background */
+  background-image: 
+    radial-gradient(circle at 50% 50%, #7e9888 0%, #4e6456 100%),
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px, 20px 20px;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #4e6456;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-gold);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-gold-light);
+}
+
+/* Helper Typography */
+.font-serif { font-family: var(--font-serif); }
+.font-serif-sc { font-family: var(--font-serif-sc); }
+.font-script { font-family: var(--font-script); }
+.font-sans { font-family: var(--font-sans); }
+
+/* Main Container Frame */
+.invitation-wrapper {
+  max-width: 480px;
+  margin: 40px auto;
+  min-height: 90vh;
+  background-color: var(--color-bg-white);
+  box-shadow: var(--shadow-premium);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 8px solid rgba(255,255,255,0.1);
+  transition: opacity 1.2s ease-in-out;
+}
+
+@media (max-width: 480px) {
+  .invitation-wrapper {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    min-height: 100vh;
+  }
+}
+
+/* Loading Screen Container */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  background-color: #4e6456;
+  background-image: radial-gradient(circle at 50% 50%, #688268 0%, #3e5044 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-bg-cream);
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+}
+
+.loading-logo {
+  font-family: var(--font-script);
+  font-size: 4rem;
+  color: var(--color-accent-gold-light);
+  margin-bottom: 20px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  animation: float-slow 3s infinite ease-in-out;
+}
+
+.loading-bar-wrapper {
+  width: 200px;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.loading-bar-progress {
+  height: 100%;
+  background-color: var(--color-accent-gold);
+  width: 0%;
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 8px var(--color-accent-gold);
+}
+
+.loading-text {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--color-sage-green-light);
+}
+
+/* 3D Interactive Envelope Cover */
+.envelope-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: #556b2f;
+  background-image: radial-gradient(circle at 50% 50%, #7e9888 0%, #4e6456 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+.envelope-container.opened {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 3D Envelope Component */
+.envelope-wrapper-3d {
+  position: relative;
+  width: 320px;
+  height: 220px;
+  background-color: var(--color-primary-pink-light);
+  perspective: 1000px;
+  box-shadow: var(--shadow-premium);
+  border-radius: 0 0 8px 8px;
+  border: 1px solid var(--color-secondary-pink);
+  margin: 40px auto 20px;
+}
+
+.envelope-wrapper-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  border-radius: 0 0 8px 8px;
+  pointer-events: none;
+}
+
+/* Inner Letter Card */
+.envelope-card-3d {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 300px;
+  height: 200px;
+  background: var(--color-bg-white);
+  border-radius: 6px;
+  box-shadow: var(--shadow-soft);
+  z-index: 2;
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.6s;
+  padding: 20px 15px;
+  text-align: center;
+  border: 1.5px solid var(--color-accent-gold-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.envelope-card-3d.slide-up {
+  transform: translateY(-145px) scale(1.05);
+  z-index: 5;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* Envelope Front folds (Sides and Bottom overlay) */
+.envelope-front-3d {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Left side triangle */
+.envelope-front-3d::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 160px solid #f4a2b1;
+  border-top: 110px solid transparent;
+  border-bottom: 110px solid #f4a2b1;
+  border-radius: 0 0 0 8px;
+}
+
+/* Right side triangle */
+.envelope-front-3d::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-right: 160px solid #f4a2b1;
+  border-top: 110px solid transparent;
+  border-bottom: 110px solid #f4a2b1;
+  border-radius: 0 0 8px 0;
+}
+
+/* Bottom center fold triangle overlay */
+.envelope-bottom-fold {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 160px solid transparent;
+  border-right: 160px solid transparent;
+  border-bottom: 120px solid #f294a4;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Envelope Top Flap */
+.envelope-flap-3d {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 160px solid transparent;
+  border-right: 160px solid transparent;
+  border-top: 115px solid #e58a99;
+  transform-origin: top;
+  z-index: 4;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), border-top-color 0.8s, z-index 0.5s;
+}
+
+.envelope-flap-3d.open {
+  transform: rotateX(180deg);
+  z-index: 1;
+  border-top-color: #f7d6db;
+}
+
+/* Gold Wax Seal on envelope cover */
+.wax-seal {
+  width: 72px;
+  height: 72px;
+  background: radial-gradient(circle, #e6c280 0%, #c5a059 70%, #9e7a35 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-gold), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -4px 6px rgba(0,0,0,0.3);
+  cursor: pointer;
+  animation: pulse-gold 2.2s infinite ease-in-out;
+  border: 3px double #f4d08b;
+  position: absolute;
+  top: 80px;
+  left: 124px;
+  z-index: 10;
+  transition: transform 0.3s ease, opacity 0.5s;
+}
+
+.wax-seal:hover {
+  transform: scale(1.08);
+}
+
+.wax-seal.hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+}
+
+.wax-seal-monogram {
+  font-family: var(--font-serif-sc);
+  font-size: 1.5rem;
+  color: var(--color-bg-cream);
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+.seal-pulse-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border: 1px solid var(--color-accent-gold);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ring-ripple 2s infinite ease-out;
+}
+
+/* Guest Greeting card on Cover Page */
+.guest-card {
+  background: var(--color-bg-white);
+  padding: 14px 20px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+  display: inline-block;
+  min-width: 240px;
+  margin-top: 10px;
+  border: 1px solid var(--color-accent-gold-light);
+  text-align: center;
+}
+
+.guest-card span {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.guest-card h3 {
+  font-family: var(--font-serif);
+  color: var(--color-text-dark);
+  font-size: 1.15rem;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+/* Scroll Fade Animations */
+.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s forwards ease-out;
+}
+
+/* Floating Animations */
+@keyframes float-slow {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulse-gold {
+  0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.7); }
+  70% { box-shadow: 0 0 0 15px rgba(197, 160, 89, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
+}
+
+@keyframes ring-ripple {
+  0% { transform: scale(0.95); opacity: 1; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Section Formatting */
+.section {
+  padding: 65px 24px;
+  position: relative;
+  text-align: center;
+  background-color: var(--color-bg-white);
+  border-bottom: 1px solid var(--color-sage-green-light);
+}
+
+.section:nth-child(even) {
+  background-color: var(--color-sage-green-light);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  color: var(--color-sage-green-dark);
+  margin-bottom: 24px;
+  position: relative;
+  display: inline-block;
+  font-weight: normal;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1.5px;
+  background-color: var(--color-accent-gold);
+  margin: 8px auto 0;
+}
+
+.section-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--color-accent-gold);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+/* Floating Petals Canvas */
+.petals-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Audio Player floating button */
+.audio-control-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-sage-green-light);
+  box-shadow: var(--shadow-premium);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 999;
+  color: var(--color-sage-green-dark);
+  transition: var(--transition-smooth);
+}
+
+.audio-control-btn:hover {
+  transform: scale(1.1);
+  background-color: var(--color-primary-pink-light);
+}
+
+.audio-control-btn.playing {
+  animation: spin-slow 12s linear infinite;
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Card Styling */
+.card {
+  background: var(--color-bg-white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  padding: 24px;
+  border: 1px solid var(--color-sage-green-light);
+  margin-bottom: 20px;
+  transition: var(--transition-smooth);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(88, 113, 99, 0.1);
+}
+
+/* Tri-Fold Card styling matching invitation picture */
+.trifold-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.trifold-panel {
+  background: var(--color-bg-white);
+  border: 1.5px solid var(--color-accent-gold-light);
+  padding: 30px 20px;
+  position: relative;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Accent arches like in the invitation */
+.trifold-panel::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  pointer-events: none;
+}
+
+.trifold-panel-header {
+  font-family: var(--font-serif-sc);
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  color: var(--color-accent-gold);
+  margin-bottom: 15px;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-text-medium);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 11px;
+  border-radius: 8px;
+  border: 1px solid var(--color-sage-green);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  background-color: var(--color-bg-cream);
+  color: var(--color-text-dark);
+  transition: var(--transition-smooth);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary-pink);
+  background-color: var(--color-bg-white);
+  box-shadow: 0 0 0 3px var(--color-primary-pink-light);
+}
+
+.radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.radio-card {
+  border: 1px solid var(--color-sage-green);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  background-color: var(--color-bg-cream);
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.radio-card.selected {
+  border-color: var(--color-primary-pink);
+  background-color: var(--color-primary-pink-light);
+  color: var(--color-primary-pink);
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: var(--color-primary-pink);
+  color: var(--color-bg-white);
+  border: none;
+  padding: 12px;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.submit-btn:hover {
+  background-color: #d17584;
+  box-shadow: 0 4px 15px rgba(226, 138, 153, 0.3);
+}
+
+/* Guestbook Timeline Style */
+.wishes-container {
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-top: 20px;
+}
+
+.wish-item {
+  text-align: left;
+  border-bottom: 1px solid var(--color-sage-green-light);
+  padding: 12px 0;
+}
+
+.wish-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.wish-name {
+  font-weight: 600;
+  color: var(--color-text-dark);
+  font-size: 0.85rem;
+}
+
+.wish-badge {
+  font-size: 0.65rem;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.wish-badge.attending {
+  background-color: var(--color-sage-green-light);
+  color: var(--color-sage-green-dark);
+}
+
+.wish-badge.decline {
+  background-color: #fce8e6;
+  color: #c53929;
+}
+
+.wish-message {
+  font-size: 0.8rem;
+  color: var(--color-text-medium);
+}
+
+/* Copy Confirmation Toast */
+.copy-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text-dark);
+  color: var(--color-bg-white);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  z-index: 1000;
+  box-shadow: var(--shadow-premium);
+  animation: fade-in-out 2s forwards;
+}
+
+@keyframes fade-in-out {
+  0% { opacity: 0; transform: translate(-50%, 10px); }
+  15% { opacity: 1; transform: translate(-50%, 0); }
+  85% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -10px); }
+}
+
+/* Floating Action Button for Wishes */
+.wishes-fab {
+  position: fixed;
+  right: 22px;
+  bottom: 30px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-bg-cream) 0%, #fff8f0 100%);
+  border: 2px solid var(--color-accent-gold);
+  box-shadow: 0 4px 20px rgba(197, 160, 89, 0.35), 0 2px 8px rgba(44, 62, 53, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 999;
+  color: var(--color-primary-pink);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: pulse-gold 2.5s infinite ease-in-out;
+}
+
+.wishes-fab:hover {
+  transform: scale(1.12) translateY(-2px);
+  background: linear-gradient(135deg, var(--color-accent-gold-light) 0%, #fff3e0 100%);
+  border-color: var(--color-primary-pink);
+  color: var(--color-accent-gold);
+  box-shadow: 0 8px 25px rgba(197, 160, 89, 0.45), 0 4px 12px rgba(44, 62, 53, 0.2);
+}
+
+@keyframes pulse-gold {
+  0% { box-shadow: 0 4px 20px rgba(197, 160, 89, 0.35), 0 0 0 0 rgba(197, 160, 89, 0.4); }
+  70% { box-shadow: 0 4px 20px rgba(197, 160, 89, 0.35), 0 0 0 10px rgba(197, 160, 89, 0); }
+  100% { box-shadow: 0 4px 20px rgba(197, 160, 89, 0.35), 0 0 0 0 rgba(197, 160, 89, 0); }
+}
+
+/* Sliding Wishes Drawer Overlay */
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-overlay-dark);
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.drawer-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.wishes-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 85%;
+  max-width: 360px;
+  background-color: var(--color-bg-white);
+  box-shadow: -5px 0 30px rgba(44, 62, 53, 0.25);
+  z-index: 1002;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  border-left: 2px solid var(--color-accent-gold-light);
+}
+
+.wishes-drawer.active {
+  transform: translateX(0);
+}
+
+.wishes-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-sage-green-light);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.wishes-drawer-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-medium);
+  transition: var(--transition-smooth);
+}
+
+.wishes-drawer-close:hover {
+  color: var(--color-primary-pink);
+  transform: rotate(90deg);
+}
+
+.wishes-drawer-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.wishes-drawer-action-btn {
+  background: linear-gradient(135deg, var(--color-primary-pink) 0%, #d4748a 100%);
+  color: var(--color-bg-white);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  margin-top: 15px;
+  width: 100%;
+  box-shadow: 0 4px 14px rgba(226, 138, 153, 0.4);
+}
+
+.wishes-drawer-action-btn:hover {
+  background: linear-gradient(135deg, var(--color-accent-gold) 0%, #b8913e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(197, 160, 89, 0.45);
+}
